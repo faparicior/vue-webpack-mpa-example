@@ -2,11 +2,16 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: {
+    vendor: ['jquery'],
+    app: './src/main.js'
+  },
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js'
+    path: path.join(__dirname, './dist'),
+    filename: '[name].js'
+    // path: path.resolve(__dirname, './dist'),
+    // publicPath: '/dist/',
+    // filename: 'build.js'
   },
   module: {
     rules: [
@@ -48,6 +53,20 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['common', 'vendor'],
+      minChunks: 2
+      // name: 'commons',
+      // (the commons chunk name)
+      // filename: 'commons.js'
+      // (the filename of the commons chunk)
+      // minChunks: 3,
+      // (Modules must be shared between 3 entries)
+      // chunks: ["pageA", "pageB"],
+      // (Only use these entries)
+    })
+  ],
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
